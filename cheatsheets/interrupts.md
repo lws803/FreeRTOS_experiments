@@ -8,8 +8,8 @@
 ## Polling 
 ```cpp
 void loop() {
-	while(!done); // Main polling code
-	process();
+    while(!done); // Main polling code
+    process();
 }
 ```
 
@@ -40,9 +40,9 @@ DMA controller with handle requests
 ## Sample interrupt code
 ```cpp
 void int0_ISR () {
-	// Do whatever you want
+    // Do whatever you want
 }
 void setup() {
-	attachInterrupt(0, int0_ISR, RISING);
+    attachInterrupt(0, int0_ISR, RISING);
 }
 ```
