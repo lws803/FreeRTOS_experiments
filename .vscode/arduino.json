@@ -1,0 +1,5 @@
+{
+    "board": "arduino:avr:uno",
+    "sketch": "rtos_pubsub/rtos_pubsub.ino",
+    "port": "/dev/cu.usbmodem14141"
+}
