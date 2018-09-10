@@ -20,11 +20,12 @@ void loop() {
     if(turn>0.5)
         funcptr=fun1;
     else
+        funcptr=fun2;
+        
     // Invoke the function
     result=funcptr(2,3);
     Serial.print("Computation result:");
     Serial.println(result);
     //200ms pause
     delay(200);
-    funcptr=fun2;
 }
