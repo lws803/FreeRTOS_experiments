@@ -66,3 +66,31 @@ Uses *PCB* to store and reload states
 IDLE == Ready  
 Context switching relies on *timer interrupts* where timer interrupts will allow OS to make a decision on whether or not to continue the process or switch it to another process (block).  
 During context switching, the system does no useful work  
+
+### Reasons for context switch
+1. Interrupt within current process which causes scheduler to free up CPU and allocate it to another process.
+2. Blocked state (waiting for IO/ Event) - only for pre-emptive OS.
+
+### Pre-emptive vs non pre-emptive
+Pre-emptive means that CPU can be taken away by running process at *any time* by OS.  
+Non pre-emptive means that once the CPU has been allocated the process, the process will will keep the CPU until it realeases the CPU either by terminating or *requesting* for IO/ event wait. 
+
+## Threads
+
+A thread (lightweight process) contains: 
+1. thread id
+2. program counter 
+3. register set (general purpose/ status registers)
+4. stack space
+
+A thread shares the following with other threads in the same process: 
+1. code section 
+2. data section 
+3. OS resources
+
+Process: Process control block (PCB)  
+Thread: Thread control block (TCB)  
+
+### Pros and cons of threading 
+- Pros: Extremely efficient inter-task and task-OS communication due to *shared memory*
+- Cons: Tasks cannot be protected from each other
