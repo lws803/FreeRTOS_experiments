@@ -14,7 +14,7 @@ A process can spawn many *threads*
 
 
 ## Process in Memory
-When a process is spawned, *text* and *data* is fixed while *heap* is dynamic  
+When a process is spawned, **text** and **data** is fixed while **heap** is dynamic  
 Each thread will have its own stack but threads in the same process will share the same *heap*
 
 ## Process control block 
@@ -40,7 +40,7 @@ Information stored:
 
 ### Who decides who's states
 *Admission control* enables the transition of a process from created to *ready*    
-*Scheduler* determines if a ready process can transfer to *running state*  
+**Scheduler** determines if a ready process can transfer to **running state**  
 
 #### Special cases
 ##### Running --> ready  
@@ -62,7 +62,7 @@ Involuntary - Process encounters an unrecoverable error
 
 ## Context switch 
 Is used to make it *seem* like multiple processes can run on the same processor  
-Uses *PCB* to store and reload states  
+Uses **PCB** to store and reload states  
 IDLE == Ready  
 Context switching relies on *timer interrupts* where timer interrupts will allow OS to make a decision on whether or not to continue the process or switch it to another process (block).  
 During context switching, the system does no useful work  
@@ -72,7 +72,7 @@ During context switching, the system does no useful work
 2. Blocked state (waiting for IO/ Event) - only for pre-emptive OS.
 
 ### Pre-emptive vs non pre-emptive
-Pre-emptive means that CPU can be taken away by running process at *any time* by OS.  
+Pre-emptive means that CPU can be taken away by running process at **any time** by OS.  
 Non pre-emptive means that once the CPU has been allocated the process, the process will will keep the CPU until it realeases the CPU either by terminating or *requesting* for IO/ event wait. 
 
 ## Threads
@@ -92,5 +92,5 @@ Process: Process control block (PCB)
 Thread: Thread control block (TCB)  
 
 ### Pros and cons of threading 
-- Pros: Extremely efficient inter-task and task-OS communication due to *shared memory*
+- Pros: Extremely efficient inter-task and task-OS communication due to **shared memory**
 - Cons: Tasks cannot be protected from each other
