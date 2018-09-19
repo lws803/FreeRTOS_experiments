@@ -27,7 +27,9 @@ After ISR completes, it will pop off the previous address and continue from wher
 If 2 interrupts are triggered at the same time, the one of higher priority will go first.
 
 ### Nested interrupts
-A higher priority interrupt can preamp the processing of lower priority interrupt
+- A higher priority interrupt can preampt the processing of lower priority interrupt
+- Even if a code segment is running in Higher priority interrupt, when a lower priority interrupt occurs, there will be context switch to the lower priority for a brief moment before moving back to the higher priority code segment. 
+
 
 ### Interrupt latency
 Interrupt response time = interrupt latency + processing time  
@@ -47,10 +49,10 @@ Device controller transfers blocks of data from buffer storage directly to main 
 DMA controller with handle requests
 
 ## Calculating processor cycle based questions
-Always take reference from a common unit eg. 
-1. Instructions - safest choice (cycles * n times of operation)
-2. Cycles 
-3. Time 
+1. Always find the **time taken per cycle** first = ```c = 1/CLOCK_SPEED```
+2. Find the **time taken between each transfer** (that will be the time spent idling) = ```b = 1/(MBs/x)``` where x is the number of bytes it can transfer each time. 
+3. Take ```b/c``` to find **Number of clock cycles inbetween each byte transfer**
+
 
 eg.  
 if a computer can transfer 16bytes at once, 4MB takes 250k times of this.  
