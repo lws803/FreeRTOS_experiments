@@ -36,7 +36,7 @@ void loop () {
 ```
 Good for when each task runs for a short time  
 No priority support  
-Fragile  
+Fragile - adding a new task could potentially make it undesirable
 
 ## Round Robin with interrupts
 ISR sets a flag, main round robin loop checks for these flags. If not flagged just skip

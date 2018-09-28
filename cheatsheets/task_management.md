@@ -28,6 +28,7 @@ Information stored:
 6. Information regarding open files (list of open files)
 7. Pointer - to store the location to next PCB in queue
 
+- **Note:** If we store more data in the PCB we will need more space per PCB and ultimately we will have less PCBs 
 
 2 memory regions: user space and kernel space, the segregation is for security reasons. To protect OS PCBs  
 
@@ -39,7 +40,7 @@ Information stored:
 5. Terminated
 
 ### Who decides who's states
-*Admission control* enables the transition of a process from created to *ready*    
+**Admission control** enables the transition of a process from created to *ready*    
 **Scheduler** determines if a ready process can transfer to **running state**  
 
 #### Special cases
@@ -93,4 +94,5 @@ Thread: Thread control block (TCB)
 
 ### Pros and cons of threading 
 - Pros: Extremely efficient inter-task and task-OS communication due to **shared memory**
+- Pros: Switching between threads can benefit from caching
 - Cons: Tasks cannot be protected from each other

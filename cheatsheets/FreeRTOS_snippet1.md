@@ -2,6 +2,7 @@
 
 FreeRTOS tasks consists of a suspended mode which can only be resumed by calling *API* ```vTaskResume()```
 
+
 ## FreeRTOS task creation
 
 ```C++
@@ -28,4 +29,4 @@ void loop () {
 - Tasks with the same priority gets the equal share 
 
 
-**Note:** FreeRTOS allows multi threading on the same processor?
+**Note:** FreeRTOS allows multi threading on the same process
