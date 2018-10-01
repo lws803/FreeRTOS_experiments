@@ -14,7 +14,7 @@ A process can spawn many *threads*
 
 
 ## Process in Memory
-When a process is spawned, *text* and *data* is fixed while *heap* is dynamic  
+When a process is spawned, **text** and **data** is fixed while **heap** is dynamic  
 Each thread will have its own stack but threads in the same process will share the same *heap*
 
 ## Process control block 
@@ -28,6 +28,7 @@ Information stored:
 6. Information regarding open files (list of open files)
 7. Pointer - to store the location to next PCB in queue
 
+- **Note:** If we store more data in the PCB we will need more space per PCB and ultimately we will have less PCBs 
 
 2 memory regions: user space and kernel space, the segregation is for security reasons. To protect OS PCBs  
 
@@ -39,8 +40,8 @@ Information stored:
 5. Terminated
 
 ### Who decides who's states
-*Admission control* enables the transition of a process from created to *ready*    
-*Scheduler* determines if a ready process can transfer to *running state*  
+**Admission control** enables the transition of a process from created to *ready*    
+**Scheduler** determines if a ready process can transfer to **running state**  
 
 #### Special cases
 ##### Running --> ready  
@@ -62,7 +63,36 @@ Involuntary - Process encounters an unrecoverable error
 
 ## Context switch 
 Is used to make it *seem* like multiple processes can run on the same processor  
-Uses *PCB* to store and reload states  
+Uses **PCB** to store and reload states  
 IDLE == Ready  
 Context switching relies on *timer interrupts* where timer interrupts will allow OS to make a decision on whether or not to continue the process or switch it to another process (block).  
 During context switching, the system does no useful work  
+
+### Reasons for context switch
+1. Interrupt within current process which causes scheduler to free up CPU and allocate it to another process.
+2. Blocked state (waiting for IO/ Event) - only for pre-emptive OS.
+
+### Pre-emptive vs non pre-emptive
+Pre-emptive means that CPU can be taken away by running process at **any time** by OS.  
+Non pre-emptive means that once the CPU has been allocated the process, the process will will keep the CPU until it realeases the CPU either by terminating or *requesting* for IO/ event wait. 
+
+## Threads
+
+A thread (lightweight process) contains: 
+1. thread id
+2. program counter 
+3. register set (general purpose/ status registers)
+4. stack space
+
+A thread shares the following with other threads in the same process: 
+1. code section 
+2. data section 
+3. OS resources
+
+Process: Process control block (PCB)  
+Thread: Thread control block (TCB)  
+
+### Pros and cons of threading 
+- Pros: Extremely efficient inter-task and task-OS communication due to **shared memory**
+- Pros: Switching between threads can benefit from caching
+- Cons: Tasks cannot be protected from each other
