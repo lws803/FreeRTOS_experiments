@@ -30,6 +30,11 @@ If 2 interrupts are triggered at the same time, the one of higher priority will 
 - A higher priority interrupt can preampt the processing of lower priority interrupt
 - Even if a code segment is running in Higher priority interrupt, when a lower priority interrupt occurs, there will be context switch to the lower priority for a brief moment before moving back to the higher priority code segment. 
 
+### Non-nested interrupts
+- Interrupts are halded sequentially. First come first serve regardless of priority 
+
+### Interrupt vector table
+- A table which contains a list of interrupts together with the addresses of their service routines.
 
 ### Interrupt latency
 Interrupt response time = interrupt latency + processing time  
@@ -44,9 +49,11 @@ When transferring data, interrupts will be triggered per byte
 CPU gets interrupted while doing tasks 
 
 ## DMA 
-CPU is only interrupted when entire document is read  
-Device controller transfers blocks of data from buffer storage directly to main memory without CPU intervention  
-DMA controller with handle requests
+- CPU is only interrupted when entire document is read
+- Device controller transfers blocks of data from buffer storage directly to main memory without CPU intervention
+- DMA controller with handle requests
+- Usually only useful for large chunks of data as small rapid transfers (eg. keyboard I/O) will only cause a larger total overhead.
+
 
 ## Calculating processor cycle based questions
 1. Always find the **time taken per cycle** first = ```c = 1/CLOCK_SPEED```

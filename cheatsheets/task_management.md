@@ -4,6 +4,9 @@ Program: *Static* entity/ template (usually an executable file)
 Process: *Dynamic* entity (usually spawned from programs)  
 A process can spawn many *threads*
 
+- A stack is usually attached to a thread, when thread dies the stack is freed
+- A heap is usually accessible by all threads within a process
+
 ## Common functions of process management 
 1. Memory management 
 2. Process control block 
@@ -15,14 +18,15 @@ A process can spawn many *threads*
 
 ## Process in Memory
 When a process is spawned, **text** and **data** is fixed while **heap** is dynamic  
-Each thread will have its own stack but threads in the same process will share the same *heap*
+Each thread will have its own stack but threads in the same process will share the same *heap*  
+Stack can grow especially during recursion calls
 
 ## Process control block 
 is a data structure in the operating system kernel containing the information needed to manage the scheduling of a particular process.  
 Information stored: 
 1. Process state
 2. Process number
-3. Program counter 
+3. Program counter - to store the address of the next instruction
 4. CPU registers - to store temporary variables
 5. Memory management information (eg. memory pointers) - pointer to memory layout: heap, stack, data and text etc. 
 6. Information regarding open files (list of open files)
@@ -40,7 +44,7 @@ Information stored:
 5. Terminated
 
 ### Who decides who's states
-**Admission control** enables the transition of a process from created to *ready*    
+**Admission control** enables the transition of a process from created to *ready* (admits a newly created process)  
 **Scheduler** determines if a ready process can transfer to **running state**  
 
 #### Special cases
@@ -77,10 +81,10 @@ Pre-emptive means that CPU can be taken away by running process at **any time** 
 Non pre-emptive means that once the CPU has been allocated the process, the process will will keep the CPU until it realeases the CPU either by terminating or *requesting* for IO/ event wait. 
 
 ## Threads
-
+**A unit of execution** within a process  
 A thread (lightweight process) contains: 
 1. thread id
-2. program counter 
+2. program counter - address of the next instruction in that task
 3. register set (general purpose/ status registers)
 4. stack space
 
