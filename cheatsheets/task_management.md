@@ -18,7 +18,7 @@ A process can spawn many *threads*
 
 ## Process in Memory
 When a process is spawned, **text** and **data** is fixed while **heap** is dynamic  
-Each thread will have its own stack but threads in the same process will share the same *heap*  
+Each thread will have its own stack but threads in the same process will share the same *heap*, each process will get its own **heap**  
 Stack can grow especially during recursion calls
 
 ## Process control block 
@@ -81,7 +81,7 @@ Pre-emptive means that CPU can be taken away by running process at **any time** 
 Non pre-emptive means that once the CPU has been allocated the process, the process will will keep the CPU until it realeases the CPU either by terminating or *requesting* for IO/ event wait. 
 
 ## Threads
-**A unit of execution** within a process  
+Also another data structure, it is a **unit of execution** within a process  
 A thread (lightweight process) contains: 
 1. thread id
 2. program counter - address of the next instruction in that task
@@ -91,7 +91,7 @@ A thread (lightweight process) contains:
 A thread shares the following with other threads in the same process: 
 1. code section 
 2. data section 
-3. OS resources
+3. OS resources - eg. address space (heap, where the global variables reside)
 
 Process: Process control block (PCB)  
 Thread: Thread control block (TCB)  

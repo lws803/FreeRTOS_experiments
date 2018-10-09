@@ -23,11 +23,13 @@ When interrupted,
 The OS preserves the address of execution of current task and dumps it in the process stack before dumping in the ISR.  
 After ISR completes, it will pop off the previous address and continue from where it left off.  
 
+- ISR is a interrupt handler (a piece of code to handle when interrupt occurs)
+
 ### Handling multiple interrupts 
 If 2 interrupts are triggered at the same time, the one of higher priority will go first.
 
 ### Nested interrupts
-- A higher priority interrupt can preampt the processing of lower priority interrupt
+- A higher priority interrupt can pre-empt the processing of lower priority interrupt
 - Even if a code segment is running in Higher priority interrupt, when a lower priority interrupt occurs, there will be context switch to the lower priority for a brief moment before moving back to the higher priority code segment. 
 
 ### Non-nested interrupts
@@ -58,7 +60,8 @@ CPU gets interrupted while doing tasks
 ## Calculating processor cycle based questions
 1. Always find the **time taken per cycle** first = ```c = 1/CLOCK_SPEED```
 2. Find the **time taken between each transfer** (that will be the time spent idling) = ```b = 1/(MBs/x)``` where x is the number of bytes it can transfer each time. 
-3. Take ```b/c``` to find **Number of clock cycles inbetween each byte transfer**
+3. Depending on what's given, if transfer is only ```x%``` of total time then do ```b = x% * b```
+4. Take ```b/c``` to find **Number of clock cycles inbetween each byte transfer**
 
 
 eg.  

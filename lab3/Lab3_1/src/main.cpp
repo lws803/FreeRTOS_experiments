@@ -6,7 +6,7 @@
 #define STACK_SIZE 200 
 
 void task1(void *p) {
-    const TickType_t xPeriod = pdMS_TO_TICKS(1500);
+    const TickType_t xPeriod = pdMS_TO_TICKS(750);
     TickType_t xLastWakeTime;
     xLastWakeTime = xTaskGetTickCount();
 
@@ -20,7 +20,7 @@ void task1(void *p) {
 
 void task2(void *p) {
     TickType_t xLastWakeTime;
-    const TickType_t xPeriod = pdMS_TO_TICKS(2000);
+    const TickType_t xPeriod = pdMS_TO_TICKS(1000);
     xLastWakeTime = xTaskGetTickCount();
 
     for (;;) { 
@@ -35,7 +35,7 @@ void task2(void *p) {
 
 void task3(void *p) {
     TickType_t xLastWakeTime;
-    const TickType_t xPeriod = pdMS_TO_TICKS(4000);
+    const TickType_t xPeriod = pdMS_TO_TICKS(2000);
     xLastWakeTime = xTaskGetTickCount();
 
     for (;;) { 
