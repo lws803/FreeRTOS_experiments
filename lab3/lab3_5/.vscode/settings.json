@@ -1,0 +1,6 @@
+{
+    "terminal.integrated.env.osx": {
+        "PATH": "/Users/marcuszhengjie/.platformio/penv/bin:/Users/marcuszhengjie/.platformio/penv:/opt/ros/kinetic/bin:/usr/local/opt/qt/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/VMware Fusion.app/Contents/Public:/opt/X11/bin:/usr/local/CrossPack-AVR/bin",
+        "PLATFORMIO_CALLER": "vscode"
+    }
+}
