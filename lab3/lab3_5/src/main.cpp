@@ -53,7 +53,6 @@ void task1(void *p) {
         execute (TASK_WCET_2, 7) ;
         xLastWakeTime = xTaskGetTickCount() ;
         vTaskDelayUntil(&xLastWakeTime, xPeriod3) ;
-        vTaskDelay(xPeriod3);
         execute (TASK_WCET_1, 6) ;
         execute (TASK_WCET_3, 8) ;
         xLastWakeTime = xTaskGetTickCount() ;
@@ -67,9 +66,6 @@ void setup() {
     pinMode(8, OUTPUT); 
     pinMode(9, OUTPUT);               
     xTaskCreate( task1, "Task1", STACK_SIZE, NULL, 1, NULL);
-        // xTaskCreate( task2, "Task2", STACK_SIZE, NULL, 2, NULL);
-        // xTaskCreate( task3, "Task3", STACK_SIZE, NULL, 3, NULL); 
-        // xTaskCreate( task4, "Task4", STACK_SIZE, NULL, 1, NULL);        
     vTaskStartScheduler();   
 }
 
