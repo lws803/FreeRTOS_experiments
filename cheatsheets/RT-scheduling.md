@@ -44,3 +44,44 @@ Sufficient condition: A task set with n tasks is schedulable under fixed priorit
 ### General outline
 ```(U <= 1) > (U-bound)```
 - Anything about U-bound may or may not be schedulable under fixed priority settings
+
+## Rate monotonic analysis
+1. Critical instant: The instant at which the release of the task will produce the largest response time.
+2. Critical instance(critical time zone): Time interval between a critical instant and the end of the reponse to the corresponding request of the task
+
+### Necessary and sufficient condition
+Steps to find if a task is schedulable (eg. taking task 3 as the target):
+1. Find the time instances to consider
+2. Take the largest time instance that is <= the deadline of the task we wanna schedule
+3. Apply ```Wi(t) = Sum (ck * ceiling(t/Pk))``` where t = the time instance we wish to consider, ck = WCET of the tasks, Pk = the periods of the tasks
+Sum all from k = 1 to the task number we're considering
+
+## Earliest deadline first
+- Priority of a task depends on the current deadline of the active task instance == **dynamic priority scheduling**
+- Scheduling decision is only made when any new task instance is released (released from period)
+
+### Optimality
+- EDF is an optimal scheduling policy
+- EDF can always produce a feasible schedule if U <= 1
+
+### RMS vs EDF
+1. RMS is simple but may not be optimal as it is not **fixed priority**
+2. EDF is complex especially when deciding on priorities in the PQ every time a new task is released
+3. EDF also has better responsiveness of aperiodic activities (non periodic activities)
+
+## Cyclic executive
+
+Hard coded scheduling.
+
+### Cycles to consider
+1. Major cycle (hyper period) = LCM
+2. Minor cycle = GCD
+
+Within a major cycle, there are mulitple minor cycles
+
+### Advantages of cyclic executive
+1. Minimises pre emption if constructed carefully
+2. No need for actual tasks, only procedure calls
+3. No schduling and context switching overhead
+
+
