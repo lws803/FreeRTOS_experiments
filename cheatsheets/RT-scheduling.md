@@ -55,6 +55,7 @@ Steps to find if a task is schedulable (eg. taking task 3 as the target):
 2. Take the largest time instance that is <= the deadline of the task we wanna schedule
 3. Apply ```Wi(t) = Sum (ck * ceiling(t/Pk))``` where t = the time instance we wish to consider, ck = WCET of the tasks, Pk = the periods of the tasks
 Sum all from k = 1 to the task number we're considering
+4. If ```Wi(t) <= t``` then the task is schedulable
 
 ## Earliest deadline first
 - Priority of a task depends on the current deadline of the active task instance == **dynamic priority scheduling**
@@ -84,4 +85,7 @@ Within a major cycle, there are mulitple minor cycles
 2. No need for actual tasks, only procedure calls
 3. No schduling and context switching overhead
 
+## Summary
+- EDF will have more context switches than RMS 
+- Cyclic executive will have less context switches compared to RMS 
 
