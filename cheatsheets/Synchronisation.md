@@ -120,4 +120,15 @@ A situation when higher priority tasks get delayed by lower priority tasks.
 
 - After the low priority process release the lock, its priority is set back to low priority.
 
+## Misc
+
+We use xSemaphoreGiveFromISR from ISR in FreeRTOS and call taskYIELD if xHigherPriorityTaskWoken is pdTRUE. This is so that the scheduler can jump straight to the **previous task waiting for the semaphore** instead of another higher priority task (if there's one).
+
+```C
+BaseType_t xHigherPriorityTaskWoken;
+xSemaphoreGiveFromISR(xSemaphore_1, &xHigherPriorityTaskWoken);
+if (xHigherPriorityTaskWoken) {
+    taskYIELD();
+}
+```
 

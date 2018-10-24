@@ -59,16 +59,17 @@ void consumerTask(void *p) {
 
 void producerTaskISR() {
     unsigned long curr_time = millis();
-    BaseType_t xHigherPriorityTaskWoken = pdTRUE ;
+    BaseType_t xHigherPriorityTaskWoken;
     // Curr time is taken to measure against the previous time when the interrupt was called, 
     // if time different is too little, the interrupt will not be triggered. 
     if (curr_time - interrupt_time_2 > 200) {
         interrupt_time_2 = curr_time;
         xSemaphoreGiveFromISR(xSemaphoreBinary, &xHigherPriorityTaskWoken ) ;
 
-
-        // Serial.println("0 activated");
-        // Serial.println(analogRead(0));
+        if (xHigherPriorityTaskWoken) {
+            // Immediately head back to task waiting for the semaphore
+            taskYIELD();
+        }
     }
 }
 

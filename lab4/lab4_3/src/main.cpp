@@ -41,13 +41,17 @@ void int1task(void *p) {
 }
 void int0ISR() {
     unsigned long curr_time = millis();
-    BaseType_t xHigherPriorityTaskWoken = pdTRUE ;
+    BaseType_t xHigherPriorityTaskWoken;
     // Curr time is taken to measure against the previous time when the interrupt was called, 
     // if time different is too little, the interrupt will not be triggered. 
     if (curr_time - interrupt_time_2 > 200) {
         interrupt_time_2 = curr_time;
         xSemaphoreGiveFromISR(xSemaphore_0, &xHigherPriorityTaskWoken ) ;
         Serial.println("0 activated");
+        if (xHigherPriorityTaskWoken) {
+            // Yield higher priority tasks and head straight to the task that was waiting for the semaphore
+            taskYIELD();
+        }
     }
 }
 void int1ISR() {
@@ -59,7 +63,12 @@ void int1ISR() {
     if (curr_time - interrupt_time_2 > 200) {
         interrupt_time_2 = curr_time;
         Serial.println("1 activated");
-        xSemaphoreGiveFromISR(xSemaphore_1, &xHigherPriorityTaskWoken ) ;
+        xSemaphoreGiveFromISR(xSemaphore_1, &xHigherPriorityTaskWoken);
+        if (xHigherPriorityTaskWoken) {
+            // Yield higher priority tasks and head straight to the task that was waiting for the semaphore
+            taskYIELD();
+        }
+
     }
 }
 
