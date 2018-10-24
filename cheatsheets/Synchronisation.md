@@ -102,8 +102,9 @@ void task2 () {
 ## Priority inversion
 A situation when higher priority tasks get delayed by lower priority tasks. 
 
-| Task 1 | Task 2 | Task 3 |
-| 3      | 2      | 1      | 
+1. Task 3 - 1
+2. Task 2 - 2
+3. Task 1 - 3
 
 - Higher priority == higher number
 
@@ -118,3 +119,5 @@ A situation when higher priority tasks get delayed by lower priority tasks.
 - When Low priority Task has the lock, it is temporarily raised to a high priority. For eg, Task 2 cannot pre-empt Task 1 anymore and allow Task 1 to complete.
 
 - After the low priority process release the lock, its priority is set back to low priority.
+
+
