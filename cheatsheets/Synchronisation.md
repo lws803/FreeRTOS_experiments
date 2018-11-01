@@ -12,7 +12,8 @@ Section within code which modifies and accesses shared data.
 
 ## Atomic lock
 
-Atomic = non-interruptable
+Atomic = non-interruptable (even from interrupts)  
+The reason we use this instead of a just a flag buffer is because the flag buffer can be accessed by 2 threads in an OS leading to deadlock.
 
 ```C
 bool TestAndSet (bool *target) {
@@ -38,7 +39,7 @@ while (1) {
 ```
 
 
-## Sempahores
+## Semaphores
 example implementation:
 
 ```C
@@ -75,22 +76,23 @@ if (S.L.empty()) {
 
 If the semaphore process queue is empty, then increment the semaphore **only up to its max amount**.
 
-### Binary Semaphores
+### Mutex
 
 Sempahore but only with a max value of 1.
+- Allow only one task to access a critical region at any one time.
 
-### Mutex with Semaphores
+### Binary semaphores (Use for ensuring order)
 ```C
-Semaphore_Handle_t xMutex; // Common mutex (initially intialised to 1) - binary semaphore
+Semaphore_Handle_t xBinary; // Common mutex (initially intialised to 1) - binary semaphore
 
 // Two concurrent processes:
 void task1() {
     // critical section
-    V(xMutex);
+    V(xBinary);
 }
 
 void task2 () {
-    P(xMutex);
+    P(xBinary);
     // Critical section
 }
 ```
@@ -100,7 +102,7 @@ void task2 () {
 
 
 ## Priority inversion
-A situation when higher priority tasks get delayed by lower priority tasks. 
+A situation when higher priority tasks get delayed by lower priority tasks because they have control over resources which the higher priority task needs.
 
 1. Task 3 - 1
 2. Task 2 - 2

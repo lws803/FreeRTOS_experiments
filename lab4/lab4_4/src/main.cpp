@@ -7,7 +7,7 @@
 SemaphoreHandle_t xSemaphoreBinary; 
 SemaphoreHandle_t xSemaphoreCountingProducer;
 SemaphoreHandle_t xSemaphoreCountingConsumer;
-SemaphoreHandle_t mutex;
+SemaphoreHandle_t xMutex; // TODO: Maybe remove
 unsigned long interrupt_time_2 = millis();
 
 int circularBuffer[4] = {0};
@@ -24,24 +24,14 @@ void producerTask(void *p) {
         circularBuffer[index] = analogRead(0);
         index++;
         index %= 4;
-
-        xSemaphoreGive(mutex);
-        // index = (index==4) ? 0 : index ;
-
-        // for (int i = 0; i < 5; i++) {
-        //     digitalWrite(6, HIGH);
-        //     delay(100);
-        //     digitalWrite(6, LOW);
-        //     delay(100);
-        // }
-        // xSemaphoreGive(xSemaphore);
+        xSemaphoreGive(xMutex); // TODO: Maybe remove
     }
 }
 void consumerTask(void *p) {
     // Loop to make it blink 5 times 
     while(1) {
-        // xSemaphoreTake(xSemaphoreCounting, portMAX_DELAY );
-        xSemaphoreTake(mutex, portMAX_DELAY);
+
+        xSemaphoreTake(xMutex, portMAX_DELAY); // TODO: Maybe remove
         xSemaphoreGive(xSemaphoreCountingConsumer);
         xSemaphoreTake(xSemaphoreCountingProducer, portMAX_DELAY);
         TickType_t xLastWakeTime ;
@@ -53,7 +43,6 @@ void consumerTask(void *p) {
         indexConsumer %= 4;
 
         vTaskDelayUntil(&xLastWakeTime, xPeriod) ;
-        // xSemaphoreGive(xSemaphore);
     }
 }
 
@@ -78,7 +67,8 @@ void setup() {
     xSemaphoreBinary = xSemaphoreCreateBinary() ;
     xSemaphoreCountingConsumer = xSemaphoreCreateCounting(4,0) ;
     xSemaphoreCountingProducer = xSemaphoreCreateCounting(4,0) ;
-    mutex = xSemaphoreCreateMutex();
+    xMutex = xSemaphoreCreateMutex(); // TODO: Maybe remove
+    xSemaphoreTake(xMutex, portMAX_DELAY); // Initialise xMutex to 1 TODO: Maybe remove
     xTaskCreate(producerTask, "producer", 200, NULL, 1, NULL ) ;
     xTaskCreate(consumerTask, "consumer", 200, NULL, 1, NULL ) ;    
     attachInterrupt(digitalPinToInterrupt(2), producerTaskISR, RISING);
