@@ -55,10 +55,10 @@ void producerTaskISR() {
         interrupt_time_2 = curr_time;
         xSemaphoreGiveFromISR(xSemaphoreBinary, &xHigherPriorityTaskWoken ) ;
 
-        if (xHigherPriorityTaskWoken) {
-            // Immediately head back to task waiting for the semaphore
-            taskYIELD();
-        }
+        // if (xHigherPriorityTaskWoken) {
+        //     // Immediately head back to task waiting for the semaphore
+        //     taskYIELD();
+        // }
     }
 }
 
