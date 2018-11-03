@@ -3,8 +3,7 @@
 #include <task.h>
 #include "semphr.h"
 #include "queue.h"
-
-SemaphoreHandle_t xSemaphoreBinary; 
+SemaphoreHandle_t xSemaphoreBinary;
 SemaphoreHandle_t xSemaphoreCountingProducer;
 SemaphoreHandle_t xSemaphoreCountingConsumer;
 SemaphoreHandle_t xMutex;
@@ -14,31 +13,32 @@ int circularBuffer[4] = {0};
 int index = 0;
 int indexConsumer = 0;
 
-void producerTask(void *p) {    
+void producerTask(void *p) {
     // Loop to make it blink 5 times
     while(1) {
         xSemaphoreGive(xSemaphoreCountingProducer);
         xSemaphoreTake(xSemaphoreCountingConsumer, portMAX_DELAY);
         xSemaphoreTake(xSemaphoreBinary, portMAX_DELAY) ;
-
+        // Protect the circular buffer
+        xSemaphoreTake(xMutex,portMAX_DELAY);
         circularBuffer[index] = analogRead(0);
+        xSemaphoreGive(xMutex);
         index++;
         index %= 4;
-        xSemaphoreGive(xMutex);
     }
 }
 void consumerTask(void *p) {
-    // Loop to make it blink 5 times 
+    // Loop to make it blink 5 times
     while(1) {
-
-        xSemaphoreTake(xMutex, portMAX_DELAY);
         xSemaphoreGive(xSemaphoreCountingConsumer);
         xSemaphoreTake(xSemaphoreCountingProducer, portMAX_DELAY);
         TickType_t xLastWakeTime ;
         xLastWakeTime = xTaskGetTickCount();
         const TickType_t xPeriod= pdMS_TO_TICKS(5000);
-
+        // Protect the circular buffer
+        xSemaphoreTake(xMutex,portMAX_DELAY);
         Serial.println(circularBuffer[indexConsumer]);
+        xSemaphoreGive(xMutex);
         indexConsumer++;
         indexConsumer %= 4;
 
@@ -49,8 +49,8 @@ void consumerTask(void *p) {
 void producerTaskISR() {
     unsigned long curr_time = millis();
     BaseType_t xHigherPriorityTaskWoken;
-    // Curr time is taken to measure against the previous time when the interrupt was called, 
-    // if time different is too little, the interrupt will not be triggered. 
+    // Curr time is taken to measure against the previous time when the interrupt was called,
+    // if time different is too little, the interrupt will not be triggered.
     if (curr_time - interrupt_time_2 > 200) {
         interrupt_time_2 = curr_time;
         xSemaphoreGiveFromISR(xSemaphoreBinary, &xHigherPriorityTaskWoken ) ;
@@ -67,10 +67,9 @@ void setup() {
     xSemaphoreBinary = xSemaphoreCreateBinary() ;
     xSemaphoreCountingConsumer = xSemaphoreCreateCounting(4,3) ;
     xSemaphoreCountingProducer = xSemaphoreCreateCounting(4,0) ;
-    xMutex = xSemaphoreCreateMutex(); 
-    xSemaphoreTake(xMutex, portMAX_DELAY); // Initialise xMutex to 1 
+    xMutex = xSemaphoreCreateMutex();
     xTaskCreate(producerTask, "producer", 200, NULL, 1, NULL ) ;
-    xTaskCreate(consumerTask, "consumer", 200, NULL, 1, NULL ) ;    
+    xTaskCreate(consumerTask, "consumer", 200, NULL, 1, NULL ) ;
     attachInterrupt(digitalPinToInterrupt(2), producerTaskISR, RISING);
     vTaskStartScheduler();
 }
