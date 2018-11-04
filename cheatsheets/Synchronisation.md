@@ -83,7 +83,7 @@ Sempahore but only with a max value of 1.
 
 ### Binary semaphores (Use for ensuring order)
 ```C
-Semaphore_Handle_t xBinary; // Common mutex (initially intialised to 1) - binary semaphore
+Semaphore_Handle_t xBinary; // initially intialised to 1 
 
 // Two concurrent processes:
 void task1() {
@@ -94,6 +94,11 @@ void task1() {
 void task2 () {
     P(xBinary);
     // Critical section
+}
+
+int setup () {
+    xBinary = createSemaphore();
+    P(xBinary) // initialise the semaphore to 1
 }
 ```
 
