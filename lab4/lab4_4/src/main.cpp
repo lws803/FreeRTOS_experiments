@@ -16,9 +16,10 @@ int indexConsumer = 0;
 void producerTask(void *p) {
     // Loop to make it blink 5 times
     while(1) {
+        xSemaphoreTake(xSemaphoreBinary, portMAX_DELAY) ;
+        // Stop if ISR not pressed
         xSemaphoreGive(xSemaphoreCountingProducer);
         xSemaphoreTake(xSemaphoreCountingConsumer, portMAX_DELAY);
-        xSemaphoreTake(xSemaphoreBinary, portMAX_DELAY) ;
         // Protect the circular buffer
         xSemaphoreTake(xMutex,portMAX_DELAY);
         circularBuffer[index] = analogRead(0);

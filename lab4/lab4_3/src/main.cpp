@@ -49,7 +49,8 @@ void int0ISR() {
         xSemaphoreGiveFromISR(xSemaphore_0, &xHigherPriorityTaskWoken ) ;
         Serial.println("0 activated");
         if (xHigherPriorityTaskWoken) {
-            // Yield higher priority tasks and head straight to the task that was waiting for the semaphore
+            // Give control back to the scheduler so that the scheduler can select the next higher priority task
+            // If there is a higher priority task in the queue, it will yield the current task that was blocked by the ISR
             taskYIELD();
         }
     }
@@ -65,10 +66,10 @@ void int1ISR() {
         Serial.println("1 activated");
         xSemaphoreGiveFromISR(xSemaphore_1, &xHigherPriorityTaskWoken);
         if (xHigherPriorityTaskWoken) {
-            // Yield higher priority tasks and head straight to the task that was waiting for the semaphore
+            // Give control back to the scheduler so that the scheduler can select the next higher priority task
+            // If there is a higher priority task in the queue, it will yield the current task that was blocked by the ISR
             taskYIELD();
         }
-
     }
 }
 
