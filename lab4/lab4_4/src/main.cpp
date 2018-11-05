@@ -5,7 +5,6 @@
 #include "queue.h"
 SemaphoreHandle_t xSemaphoreBinary;
 SemaphoreHandle_t xSemaphoreCountingProducer;
-SemaphoreHandle_t xSemaphoreCountingConsumer;
 SemaphoreHandle_t xMutex;
 unsigned long interrupt_time_2 = millis();
 
@@ -19,7 +18,6 @@ void producerTask(void *p) {
         xSemaphoreTake(xSemaphoreBinary, portMAX_DELAY) ;
         // Stop if ISR not pressed
         xSemaphoreGive(xSemaphoreCountingProducer);
-        xSemaphoreTake(xSemaphoreCountingConsumer, portMAX_DELAY);
         // Protect the circular buffer
         xSemaphoreTake(xMutex,portMAX_DELAY);
         circularBuffer[index] = analogRead(0);
@@ -31,7 +29,6 @@ void producerTask(void *p) {
 void consumerTask(void *p) {
     // Loop to make it blink 5 times
     while(1) {
-        xSemaphoreGive(xSemaphoreCountingConsumer);
         xSemaphoreTake(xSemaphoreCountingProducer, portMAX_DELAY);
         TickType_t xLastWakeTime ;
         xLastWakeTime = xTaskGetTickCount();
