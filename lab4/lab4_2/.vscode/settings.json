@@ -1,6 +1,6 @@
 {
     "terminal.integrated.env.osx": {
-        "PATH": "/Users/wilson/.platformio/penv/bin:/Users/wilson/.platformio/penv:/Users/wilson/google-cloud-sdk/bin:/Library/Frameworks/Python.framework/Versions/3.6/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/VMware Fusion.app/Contents/Public:/usr/local/share/dotnet:/opt/X11/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/usr/local/CrossPack-AVR/bin:/Applications/Wireshark.app/Contents/MacOS:/Users/wilson/bin",
+        "PATH": "/Users/wilson/.platformio/penv/bin:/Users/wilson/.platformio/penv:/opt/local/bin:/opt/local/sbin:/Users/wilson/google-cloud-sdk/bin:/Library/Frameworks/Python.framework/Versions/3.6/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/VMware Fusion.app/Contents/Public:/usr/local/share/dotnet:/opt/X11/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/usr/local/CrossPack-AVR/bin:/Applications/Wireshark.app/Contents/MacOS:/Users/wilson/bin",
         "PLATFORMIO_CALLER": "vscode"
     }
 }
