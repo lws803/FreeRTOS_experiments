@@ -200,9 +200,9 @@ void setup() {
     xTaskCreate(brakeButtonTask, "brake", 100, NULL, 3, NULL); 
     xTaskCreate(accelButtonTask, "accelerate", 100, NULL, 3, NULL);
     // Same priority as accelerate as we assume that user wont hit both at the same time
-    xTaskCreate(redLEDTask, "redBrakeLED", 100, NULL, 2, NULL);
+    xTaskCreate(redLEDTask, "redBrakeLED", 100, NULL, 1, NULL);
     xTaskCreate(readDistanceTask, "readDistance", 100, NULL, 4, NULL); // Highest priority
-    xTaskCreate(UARTTask, "infoTask", 100, NULL, 1, NULL);
+    xTaskCreate(UARTTask, "infoTask", 100, NULL, 2, NULL);
 
     Serial.println("Initialised");
     vTaskStartScheduler();
