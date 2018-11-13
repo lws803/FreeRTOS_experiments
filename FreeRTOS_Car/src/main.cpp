@@ -115,7 +115,9 @@ void readDistanceTask (void *p) {
 void brakeButtonTask (void *p) {
     while (1) {
         xSemaphoreTake (brakeBinarySemaphore, portMAX_DELAY);
+        xSemaphoreTake(speedMutex, portMAX_DELAY);
         car.desiredSpeed = (car.desiredSpeed > 0) ? car.desiredSpeed - 1 : car.desiredSpeed ;
+        xSemaphoreGive(speedMutex);
         speedInterpreter();
     }
 }
@@ -123,7 +125,9 @@ void brakeButtonTask (void *p) {
 void accelButtonTask (void *p) {
     while (1) {
         xSemaphoreTake (accelBinarySemaphore, portMAX_DELAY);
+        xSemaphoreTake(speedMutex, portMAX_DELAY);
         car.desiredSpeed = (car.desiredSpeed < 3) ? car.desiredSpeed + 1 : car.desiredSpeed ;
+        xSemaphoreGive(speedMutex);
         speedInterpreter();
     }
 }
