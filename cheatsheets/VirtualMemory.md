@@ -48,4 +48,50 @@ PPN + PPO
 ```
 Physical page number + physical page offset. Num offset bits is the same for virtual and physical
 
+## Page Tables
+Array of [age tables entries (PTE) that maps virtual pages to physical pages. 
+
+- 1 process will have one page table.
+- Page tables are stored in the physical memory/ main memory (DRAM)
+- Page table should have one page table entry corresponding to teach virtual page
+- Key fields in each PTE (Valid bit, physical page number)
+
+### Page table size
+- Bit for page table entry: 1 valid bit + bits_needed_for_page_offset
+- Number page table entries = num virtual pages
+- Total page table size = number of page table entries * Bit for page table entry
+
+### Address translation with page table
+
+MMU will do the translation. 
+
+##### Page hit
+Reference to virtual memory byte that is in physical memory.
+
+- Note: For steps refer to lecture notes
+
+##### Page Fault
+
+Reference to virtual memory that is not in physical memory
+
+###### Handling page fault
+
+1. User access a memory location
+2. That page does not exist on physical memory but is currently on disk
+3. Page fault raises an exception
+4. OS Page handler will load the page into physical memory
+5. Modify page table entry corresponding to the virtual page (if physical memory is full, find a victim to replace)
+6. Returns to faulting instruction
+7. Successful memory access on the second try
+
+
+## Speed up translation
+- Solution: Add another cache
+- Translation lookaside buffer: Small hardware cache inside MMU which contains page table entries for small number of virtual pages (most recent accesses)
+
+## Virtual memory advantages
+
+1. Solves some of the issues with memory allocation in physical memory
+2. Virtual memory uses fixed page-size allocations -> internal fragmentation if the process is not using the entire page.
+3. Virtual memory does not require contiguous allocation in the physical memory for a process -> No external fragmentation.
 
