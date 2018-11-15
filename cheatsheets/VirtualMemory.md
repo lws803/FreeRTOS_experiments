@@ -95,3 +95,4 @@ Reference to virtual memory that is not in physical memory
 2. Virtual memory uses fixed page-size allocations -> internal fragmentation if the process is not using the entire page.
 3. Virtual memory does not require contiguous allocation in the physical memory for a process -> No external fragmentation.
 
+Having larger page sizes will result in less page faults but also more holes as the spaces are not utilised
