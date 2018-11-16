@@ -38,13 +38,9 @@ void speedInterpreter () {
         safeSpeed = 3;
     }
 
-    if (safeSpeed < car.desiredSpeed) {
+    if (safeSpeed < car.currentSpeed) {
         // turn on red LED
-        int flag = 1;
-        xQueueSend(redLEDQueue, &flag, 1);
-    } else {
-        int flag = 0;
-        xQueueSend(redLEDQueue, &flag, 1);
+        xQueueSend(redLEDQueue, NULL, 1);
     }
 
     car.currentSpeed = min(safeSpeed, car.desiredSpeed);
@@ -78,19 +74,14 @@ void speedInterpreter () {
 }
 
 void redLEDTask (void *p) {
-    const TickType_t xDelay = pdMS_TO_TICKS(500); // 1 sec 
-    int flag = 0;
+    const TickType_t xDelay = pdMS_TO_TICKS(1000); // 1 sec 
     while (1) {
-        xQueueReceive(redLEDQueue, &flag, 1);
-        if (flag) {
-            // Turn on LED
-            digitalWrite(13, 1);
-            vTaskDelay(xDelay);
-            // Turn off LED
-            digitalWrite(13, 0);
-            vTaskDelay(xDelay);
-            // Serial.println("Brake LED");
-        }
+        xQueueReceive(redLEDQueue, NULL, portMAX_DELAY);
+        // Turn on LED
+        digitalWrite(13, 1);
+        vTaskDelay(xDelay);
+        // Turn off LED
+        digitalWrite(13, 0);
     }
 }
 
