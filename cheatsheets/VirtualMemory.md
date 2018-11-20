@@ -19,10 +19,15 @@ Virtual memory is partitioned into number of blocks called pages. These pages ca
 Transfer between disk and physical memory is done via DMA
 
 ### Calculating virtual memory
-
+Each bit corresponds to one byte.  
+eg. 2^32 for a 32 bit system with 32 bit virtual address space = 4Gb (2^32 direct translation, no need to divide by 8)
 ##### Calculate bits needed for virtual/ physical address
 ```
-ln(num_bits)/ln(2)
+virtual_address_space - offset_bits
+physical_address_space - offset_bits
+
+virtual_address_space_bits = 32 bit system
+physical_address_space_bits = log(how many gb ram)/log(2)
 ```
 ##### Calculate num pages (virtual/ physical)
 - number of pages: `num_bytes/page_size_in_bytes`
@@ -33,10 +38,6 @@ ln(num_bits)/ln(2)
 ln(num_bytes_for_page)/ln(2)
 ```
 
-##### Number of bits required in a 32bit/ 64bit OS
-```
-2^32 or 2^64
-```
 ##### What does the virtual/ physical address consist of
 ```
 VPN + VPO
@@ -47,6 +48,17 @@ Virtual page number + virtual page offset. Offset is calculated from `ln(num_byt
 PPN + PPO
 ```
 Physical page number + physical page offset. Num offset bits is the same for virtual and physical
+
+##### Page table translation
+We want to convert virtual address to physical address. Num of offset bits stay the same for both.
+
+Steps:
+1. Convert the virtual address to bits
+2. Split them up into virtual page number section and offset section
+3. Look up the table to find what the virtual page number corresponds to and its corresponding physical address page number
+4. Convert physical address page number to bits
+5. Append the bits in front of the offset
+
 
 ## Page Tables
 Array of [age tables entries (PTE) that maps virtual pages to physical pages. 

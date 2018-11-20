@@ -15,7 +15,7 @@ Section within code which modifies and accesses shared data.
 Atomic = non-interruptable (even from interrupts)  
 The reason we use this instead of a just a flag buffer is because the flag buffer can be accessed by 2 threads in an OS leading to deadlock.
 
-```C
+```cpp
 bool TestAndSet (bool *target) {
     // Chunk of code here is atomic
 
@@ -30,7 +30,7 @@ bool TestAndSet (bool *target) {
 
 ### Use of test and set
 
-```C
+```cpp
 while (1) {
     while (TestAndSet(&lock)); // acquire lock, if lock not available then wait
     // critical section
@@ -42,7 +42,7 @@ while (1) {
 ## Semaphores
 example implementation:
 
-```C
+```cpp
 typedef struct {
     int value;
     queue<void *> L; // this is a queue which stores all processes waiting to enter their criticial sections
@@ -54,7 +54,7 @@ typedef struct {
 Also known as take operation. Call this process to take the lock if available.
 If not, wait and be put to blocked state after putting the process into the queue within semaphore.
 
-```C
+```cpp
 if (S.value > 0) {
     S.value--;
 } else {
@@ -66,7 +66,7 @@ If lock is unavailable, it will block the **Caller** of P(S)
 ### V(S) operation
 
 Also known as the give operation. Call this process to release the semaphore.
-```C
+```cpp
 if (S.L.empty()) {
     S.value++; // Will cap it at a max amount
 } else {
@@ -82,7 +82,7 @@ Sempahore but only with a max value of 1.
 - Allow only one task to access a critical region at any one time.
 
 ### Binary semaphores (Use for ensuring order)
-```C
+```cpp
 Semaphore_Handle_t xBinary; // initially intialised to 1 
 
 // Two concurrent processes:
@@ -109,6 +109,7 @@ int setup () {
 ## Priority inversion
 A situation when higher priority tasks get delayed by lower priority tasks because they have control over resources which the higher priority task needs.
 
+
 1. Task 3 - 1
 2. Task 2 - 2
 3. Task 1 - 3
@@ -122,6 +123,9 @@ A situation when higher priority tasks get delayed by lower priority tasks becau
 
 
 ### Solution - Priority inheritance
+```
+Present in the FreeRTOS mutexSemaphore.
+```
 
 - When Low priority Task has the lock, it is temporarily raised to a high priority. For eg, Task 2 cannot pre-empt Task 1 anymore and allow Task 1 to complete.
 
@@ -131,7 +135,7 @@ A situation when higher priority tasks get delayed by lower priority tasks becau
 
 We use xSemaphoreGiveFromISR from ISR in FreeRTOS and call taskYIELD if xHigherPriorityTaskWoken is pdTRUE. This is so that the scheduler can scheduler the higher priority task instead of the one that was pre-empted due to ISR. 
 
-```c
+```cpp
 BaseType_t xHigherPriorityTaskWoken;
 xSemaphoreGiveFromISR(xSemaphore_1, &xHigherPriorityTaskWoken);
 if (xHigherPriorityTaskWoken) {

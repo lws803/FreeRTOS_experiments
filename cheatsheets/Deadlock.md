@@ -50,9 +50,16 @@ A safe system can have Multiple safe sequences.
 
 ## Deadlock detection (also seen in banker's algo)
 
-```C++
+```cpp
+    // Initialise
+    vector<int> work = available; // This makes sure that work is initialised to what's currently available at this snapshot.
+    vector<bool> Finish (numProcesses, false); // All false
+    
+
     while (true) {
         // Find an i such that its not finished and need <= work
+        // ***Most important step. If all tasks are finished, then system is definitely in safe state, else if some are unfinished, we check if need <= work for all resources.
+        // If work == 0 for all resources, and no process is finished and all processes needs are more than work, then the system is in an unsafe state
         int chosen = -1;
         for (int i = 0; i < numProcesses; i++) {
             // Most important section in determining if a process can be completed given the current amount of resources available.
@@ -64,6 +71,7 @@ A safe system can have Multiple safe sequences.
         
         // If there's a chosen one, it is not finished yet and we add on to the working resources for next iteration
         if (chosen != -1) {
+            // ***This implicity ensures that work is only added (workPlusAllocation) if it is not a finished task and allocating the resource it needs it will ensure that it completes
             work = workPlusAllocation(work, allocation[chosen]);
             Finish[chosen] = true;
             processSequence.push(chosen);
