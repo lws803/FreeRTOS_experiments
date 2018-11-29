@@ -54,14 +54,14 @@ We want to convert virtual address to physical address. Num of offset bits stay 
 
 Steps:
 1. Convert the virtual address to bits
-2. Split them up into virtual page number section and offset section
-3. Look up the table to find what the virtual page number corresponds to and its corresponding physical address page number
-4. Convert physical address page number to bits
-5. Append the bits in front of the offset
+2. Split them up into `virtual page number` section and offset section
+3. Look up the table to find what the `virtual page number` corresponds to and its corresponding `physical address page number`
+4. Convert `physical address page number` to bits
+5. Append the bits in front of the offset (offset stays the same for both)
 
 
 ## Page Tables
-Array of [age tables entries (PTE) that maps virtual pages to physical pages. 
+Array of page tables entries (PTE) that maps virtual pages to physical pages. 
 
 - 1 process will have one page table.
 - Page tables are stored in the physical memory/ main memory (DRAM)
@@ -91,34 +91,37 @@ Reference to virtual memory that is not in physical memory
 1. User access a memory location
 2. That page does not exist on physical memory but is currently on disk
 3. Page fault raises an exception
-4. If physical memory is full, find a victim or dirty page frame to replace 
-5. Page handler will then send the victim page to virtual memory
-6. OS then looks up the virtual memory for the address we need and then begin transfer to physical memory
-7. Returns to faulting instruction when transfer is complete
-8. Successful memory access on the second try
+4. OS then looks up the virtual memory for the address we need and then begin transfer to physical memory
+5. Returns to faulting instruction when transfer is complete
+6. Successful memory access on the second try
+
+###### Handling page fault (extension)
+- 3a. If physical memory is full  
+3a1. find a victim or dirty page frame to replace using replacement policy  
+3a2. Page handler will then send the victim page to virtual memory
+
 
 ###### Verbose version
-```
-- The computer hardware traps to the kernel and program counter (PC) is saved on the stack. Current instruction state information is saved in CPU registers.
+1. The computer hardware traps to the kernel and program counter (PC) is saved on the stack. Current instruction state information is saved in CPU registers.
 
-- An assembly program is started to save the general registers and other volatile information to keep the OS from destroying it.
+2. An assembly program is started to save the general registers and other volatile information to keep the OS from destroying it.
 
-- Operating system finds that a page fault has occurred and tries to find out which virtual page is needed. Some times hardware register contains this required information. If not, the operating system must retrieve PC, fetch instruction and find out what it was doing when the fault occurred.
+3. Operating system finds that a page fault has occurred and tries to find out which virtual page is needed. Some times hardware register contains this required information. If not, the operating system must retrieve PC, fetch instruction and find out what it was doing when the fault occurred.
 
-- Once virtual address caused page fault is known, system checks to see if address is valid and checks if there is no protection access problem.
+4. Once virtual address caused page fault is known, system checks to see if address is valid and checks if there is no protection access problem.
 
-- If the virtual address is valid, the system checks to see if a page frame is free. If no frames are free, the page replacement algorithm is run to remove a page.
+5. If the virtual address is valid, the system checks to see if a page frame is free. If no frames are free, the page replacement algorithm is run to remove a page.
 
-- If frame selected is dirty, page is scheduled for transfer to disk, context switch takes place, fault process is suspended and another process is made to run until disk transfer is completed.
+6. If frame selected is dirty, page is scheduled for transfer to disk, context switch takes place, fault process is suspended and another process is made to run until disk transfer is completed.
 
-- As soon as page frame is clean, operating system looks up disk address where needed page is, schedules disk operation to bring it in.
+7. As soon as page frame is clean, operating system looks up disk address where needed page is, schedules disk operation to bring it in.
 
-- When disk interrupt indicates page has arrived, page tables are updated to reflect its position, and frame marked as being in normal state.
+8. When disk interrupt indicates page has arrived, page tables are updated to reflect its position, and frame marked as being in normal state.
 
-- Faulting instruction is backed up to state it had when it began and PC is reset. Faulting is scheduled, operating system returns to routine that called it.
+9. Faulting instruction is backed up to state it had when it began and PC is reset. Faulting is scheduled, operating system returns to routine that called it.
 
-- Assembly Routine reloads register and other state information, returns to user space to continue execution.
-```
+10. Assembly Routine reloads register and other state information, returns to user space to continue execution.
+
 
 ###### Largest overheads when handling page faults
 1. Page handler looking up for the page in virtual memory due to page fault and disk operation to bring the page into physical memory
@@ -131,7 +134,7 @@ Contains information such as valid bit and physical page number if the virtual p
 ## Speed up translation
 - Problem: Needs to keep looking up PTE, at least twice (translation and actual memory request)
 - Solution: Add another cache
-- Translation lookaside buffer: Small hardware cache inside MMU which contains page table entries for small number of virtual pages (most recent accesses)
+- Translation lookaside buffer (TLB): Small hardware cache inside MMU which contains page table entries for small number of virtual pages (most recent accesses)
 - Location: inside MMU
 
 #### Additional info
@@ -148,4 +151,4 @@ Contains information such as valid bit and physical page number if the virtual p
 Having larger page sizes will result in less page faults but also more holes as the spaces are not utilised
 
 ## Multi-processing support
-Having more processes who do not take up the whole main memory will still result in page faults. This is because the processes can occupy physical memory at the same time (running concurrently)
+Having more processes who do not take up the whole main memory will still result in page faults. This is because each process will still be given a private virtual address space and the processes can map to physical memory at the same time (running concurrently)

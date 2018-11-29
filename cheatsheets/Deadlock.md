@@ -24,7 +24,7 @@ If graph contains a cycle
 
 #### Prevent at least one of the deadlock conditions to happen: 
 - Mutual exclusion: not required for sharable resources
-- Hold and wait: Must guarantee that whenever a resource requests a resource, it does not hold any other resource. All for one. (only when all are available then execute)
+- Hold and wait: Must guarantee that whenever a process requests a resource, it does not hold any other resource. All for one. (only when all are available then execute)
 - No preemption: If a process that is holding some resources requests another resource that cannot be immediately allocated to it, then it will release all the resources it is currently holding. The process will restart later
 - Circular wait: Allow a max number of processes to be simultaneously fighting for resource
 

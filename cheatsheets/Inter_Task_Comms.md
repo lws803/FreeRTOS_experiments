@@ -75,7 +75,7 @@ If queue is *empty*, receiver tasks will be placed in waiting list (whereby high
 
 ### Misc
 
-```C
+```c
 BaseType_t xHigherPriorityTaskWoken;
 xQueueSendToBackFromISR(... , &xHigherPriorityTaskWoken) 
 // Similar to xSemaphoreGiveFromISR, this will give us the opportunity to jump back to the task that was waiting for a message. 

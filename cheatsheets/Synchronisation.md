@@ -3,12 +3,13 @@
 ## Race condition
 
 Concurrent access to a shared data can lead to inconsistency. 
-This is usually because of pre-emption by the OS on tasks that are writing or reading to the shared variable.
+This is usually because of pre-emption by the OS on tasks that are writing or reading to the shared variable.  
+Undesirable situation where two or more operations are done on the shared address space at the same time.
 
 
 ## Critical section
 
-Section within code which modifies and accesses shared data. 
+Section within code which modifies and accesses shared data.
 
 ## Atomic lock
 
@@ -16,15 +17,18 @@ Atomic = non-interruptable (even from interrupts)
 The reason we use this instead of a just a flag buffer is because the flag buffer can be accessed by 2 threads in an OS leading to deadlock.
 
 ```cpp
-bool TestAndSet (bool *target) {
+bool testAndSet (bool *target) {
     // Chunk of code here is atomic
+    bool temp = &target;
 
     // If key is available then quickly set it to true to acquire it.
-    if (target == false) {
-        target = true;
+    if (&target == false) {
+        &target = true;
+        // testAndSet will still return false as temp is false
+    } else {
+        // Do nothing, temp will be true and TestAndSet will return true
     }
-
-    return target;
+    return temp;
 }
 ```
 
@@ -32,7 +36,7 @@ bool TestAndSet (bool *target) {
 
 ```cpp
 while (1) {
-    while (TestAndSet(&lock)); // acquire lock, if lock not available then wait
+    while (testAndSet(&lock)); // acquire lock, if lock not available then wait
     // critical section
     lock = false; // release lock
 }
@@ -80,10 +84,11 @@ If the semaphore process queue is empty, then increment the semaphore **only up 
 
 Sempahore but only with a max value of 1.
 - Allow only one task to access a critical region at any one time.
+- Has priority inheritance for FreeRTOS
 
 ### Binary semaphores (Use for ensuring order)
 ```cpp
-Semaphore_Handle_t xBinary; // initially intialised to 1 
+Semaphore_Handle_t xBinary; 
 
 // Two concurrent processes:
 void task1() {
@@ -98,7 +103,7 @@ void task2 () {
 
 int setup () {
     xBinary = createSemaphore();
-    P(xBinary) // initialise the semaphore to 1
+    P(xBinary) // change the semaphore to 0
 }
 ```
 
@@ -123,7 +128,7 @@ A situation when higher priority tasks get delayed by lower priority tasks becau
 
 
 ### Solution - Priority inheritance
-```
+```md
 Present in the FreeRTOS mutexSemaphore.
 ```
 
@@ -133,7 +138,7 @@ Present in the FreeRTOS mutexSemaphore.
 
 ## Misc
 
-We use xSemaphoreGiveFromISR from ISR in FreeRTOS and call taskYIELD if xHigherPriorityTaskWoken is pdTRUE. This is so that the scheduler can scheduler the higher priority task instead of the one that was pre-empted due to ISR. 
+We use xSemaphoreGiveFromISR from ISR in FreeRTOS and call taskYIELD if xHigherPriorityTaskWoken is pdTRUE. This is so that the scheduler can schedule the higher priority task instead of the one that was pre-empted due to ISR. 
 
 ```cpp
 BaseType_t xHigherPriorityTaskWoken;
