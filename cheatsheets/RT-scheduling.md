@@ -47,15 +47,19 @@ Sufficient condition: A task set with n tasks is schedulable under fixed priorit
 
 ## Rate monotonic analysis
 1. Critical instant: The instant at which the release of the task will produce the largest response time.
-2. Critical instance(critical time zone): Time interval between a critical instant and the end of the reponse to the corresponding request of the task
+2. Critical instance: **the task instance** released at the critical instant
+
+#### Critical instant analysis
+WCRT of task T at its critical instant should not be longer than its deadline
 
 ### Necessary and sufficient condition
 Steps to find if a task is schedulable (eg. taking task 3 as the target):
-1. Find the time instances to consider
-2. Take the largest time instance that is <= the deadline of the task we wanna schedule
-3. Apply ```Wi(t) = Sum (ck * ceiling(t/Pk))``` where t = the time instance we wish to consider, ck = WCET of the tasks, Pk = the periods of the tasks
-Sum all from k = 1 to the task number we're considering
-4. If ```Wi(t) <= t``` then the task is schedulable
+1. Find the time instances to consider (k values)
+2. Use the smallest t found from step 1 to obtain `Wi(t) = sum( Ck * ceil(t/Pk) ) = w1`
+3. Use `w1` to substitute to the next t `Wi(w1) = sum( Ck * ceil(w1/Pk) ) = w2`
+4. So on and so forth until `Wi(t) <= t`
+
+Note: Wi(t) is the time the task in question will finish by eg. if `Wi(t) == 300`, then the task will finish executing by t=300
 
 ## Earliest deadline first
 - Priority of a task depends on the current deadline of the active task instance == **dynamic priority scheduling**
@@ -66,9 +70,10 @@ Sum all from k = 1 to the task number we're considering
 - EDF can always produce a feasible schedule if U <= 1
 
 ### RMS vs EDF
-1. RMS is simple but may not be optimal as it is not **fixed priority**
+1. RMS is simple but may not be optimal as it is **fixed priority**
 2. EDF is complex especially when deciding on priorities in the PQ every time a new task is released
 3. EDF also has better responsiveness of aperiodic activities (non periodic activities)
+4. EDF allows full processor utilisation.
 
 ## Cyclic executive
 
@@ -81,7 +86,7 @@ Hard coded scheduling.
 Within a major cycle, there are mulitple minor cycles
 
 ### Advantages of cyclic executive
-1. Minimises pre emption if constructed carefully
+1. Minimises pre-emption if constructed carefully
 2. No need for actual tasks, only procedure calls
 3. No schduling and context switching overhead
 
